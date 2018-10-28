@@ -14,69 +14,32 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int cmp_dbl(double d1, double d2);
+size_t get_num_uniques(const double a1[], const double a2[], size_t a1_size, size_t a2_size);
+void merge(const double a1[], const double a2[], size_t a1_size, size_t a2_size, double *merged, size_t m_size);
+int cmp_dbl(const double d1, const double d2);
 
 int main(void)
 {
   int i;
   double arr1[7] = { 1.3, 2.1, 4.2, 7.0, 9.0, 53.23, 99.9 };
   double arr2[5] = { 2.1, 5.3, 7.0, 12.0, 32.35 };
+  double *merged_arr;
 
   size_t arr1_size = sizeof(arr1) / sizeof(double);
   size_t arr2_size = sizeof(arr2) / sizeof(double);
-  size_t num_uniques = 1;
-
-  double *temp_arr = (double*)malloc((arr1_size + arr2_size) * sizeof(double));
-  double *merged_arr;
-  size_t merged_counter = 0;
-
-  /* add items from arr1 to temp_arr */
-  for (i = 0; i < arr1_size; i++)
-  {
-    temp_arr[i] = arr1[i];
-  }
+  size_t merged_size = get_num_uniques(arr1, arr2, arr1_size, arr2_size);
   
-  /* add items from arr2 to temp_arr */
-  for (i = 0; i < arr2_size; i++)
+  merged_arr = (double*)malloc(merged_size * sizeof(double));
+  if (merged_arr == NULL)
   {
-    temp_arr[arr1_size + i] = arr2[i];
+    printf("\nCouldn't allocate memory");
+    exit(EXIT_FAILURE);
   }
 
-  /* sort temp_arr */
-  for (i = 1; i < (arr1_size + arr2_size); i++)
-  {
-    if (temp_arr[i] < temp_arr[i - 1])
-    {
-      /* swap items */
-      double tmp = temp_arr[i];
-      temp_arr[i] = temp_arr[i - 1];
-      temp_arr[i - 1] = tmp;
-      i = 1;
-    }
-  }
+  merge(arr1, arr2, arr1_size, arr2_size, merged_arr, merged_size);
 
-  /* get number of unique items */
-  for (i = 1; i < (arr1_size + arr2_size); i++)
-  {
-    if (temp_arr[i] == temp_arr[i - 1])
-      continue;
-    num_uniques++;
-  }
-
-  merged_arr = (double*)malloc(num_uniques * sizeof(double));
-
-  /* add items to merged arr */
-  for (i = 0; i < (arr1_size + arr2_size); i++)
-  {
-    if (i > 0 && temp_arr[i] == temp_arr[i - 1])
-      continue;
-    merged_arr[merged_counter++] = temp_arr[i];
-  }
-
-  free(temp_arr);
-
-  printf("\nMerged: ");
-  for (i = 0; i < num_uniques; i++)
+  printf("\n");
+  for (i = 0; i < merged_size; i++)
     printf(" %f", merged_arr[i]);
 
   free(merged_arr);
@@ -84,9 +47,78 @@ int main(void)
   return EXIT_SUCCESS;
 }
 
+size_t get_num_uniques(const double a1[], const double a2[], size_t a1_size, size_t a2_size)
+{
+  int cmp;
+  int i = 0, j = 0;
+  size_t uniques = 0;
 
+  while (i < a1_size || j < a2_size)
+  {
+    if (i < a1_size && j < a2_size)
+    {
+      cmp = cmp_dbl(a1[i], a2[j]);
 
-int cmp_dbl(double d1, double d2)
+      if (cmp == 1)
+        j++;
+      else if (cmp == 0)
+      {
+        i++;
+        j++;
+      }
+      else if (cmp == -1)
+        i++;
+
+      uniques++;
+    }
+    else
+    {
+      if (i < a1_size)
+        i++;
+      else if (j < a2_size)
+        j++;
+
+      uniques++;
+    }
+  }
+
+  return uniques;
+}
+
+void merge(const double a1[], const double a2[], size_t a1_size, size_t a2_size, double *merged, size_t m_size)
+{
+  int cmp;
+  int i;
+  int r = 0, s = 0, t = 0;
+
+  for (i = 0; i < m_size; i++)
+  {
+    if (r < a1_size && s < a2_size)
+    {
+      cmp = cmp_dbl(a1[r], a2[s]);
+
+      if (cmp == 1)
+        merged[t++] = a2[s++];
+      else if (cmp == 0)
+      {
+        merged[t++] = a1[r];
+        r++;
+        s++;
+      }
+      else if (cmp == -1)
+        merged[t++] = a1[r++];
+    }
+    else
+    {
+      if (r < a1_size)
+        merged[t++] = a1[r++];
+      else if (s < a2_size)
+        merged[t++] = a2[s++];
+    }
+  }
+}
+
+int cmp_dbl(const double d1, const double d2)
 {
   if (d1 < d2)
     return -1;
@@ -95,4 +127,3 @@ int cmp_dbl(double d1, double d2)
   else
     return 0;
 }
-
