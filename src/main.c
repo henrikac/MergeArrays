@@ -1,5 +1,5 @@
 /*
- * Programmer: Henrik A. Christensen     Date Completed: in progress
+ * Programmer: Henrik A. Christensen     Date Completed: 28-10-2018
  * Instructor: Kurt Nørmark              Class:          Imperative Programming
  *
  * Write a function that will merge the contents of two sorted arrays (ascending order)
