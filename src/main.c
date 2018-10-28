@@ -20,7 +20,6 @@ int cmp_dbl(const double d1, const double d2);
 
 int main(void)
 {
-  int i;
   double arr1[7] = { 1.3, 2.1, 4.2, 7.0, 9.0, 53.23, 99.9 };
   double arr2[5] = { 2.1, 5.3, 7.0, 12.0, 32.35 };
   double *merged_arr;
@@ -38,15 +37,19 @@ int main(void)
 
   merge(arr1, arr2, arr1_size, arr2_size, merged_arr, merged_size);
 
-  printf("\n");
-  for (i = 0; i < merged_size; i++)
-    printf(" %f", merged_arr[i]);
-
   free(merged_arr);
 
   return EXIT_SUCCESS;
 }
 
+/**
+ * Get the number of unique items from two arrays
+ * @param[in] a1 First array
+ * @param[in] a2 Second array
+ * @param[in] a1_size Size of the first array
+ * @param[in] a2_size Size of the second array
+ * @return Number of unique items
+*/
 size_t get_num_uniques(const double a1[], const double a2[], size_t a1_size, size_t a2_size)
 {
   int cmp;
@@ -85,6 +88,15 @@ size_t get_num_uniques(const double a1[], const double a2[], size_t a1_size, siz
   return uniques;
 }
 
+/**
+ * Merge two arrays with no dublicate values
+ * @param[in] a1 The first array
+ * @param[in] a2 The second array
+ * @param[in] a1_size Size of the first array
+ * @param[in] a2_size Size of the second array
+ * @param[out] merged The merged array
+ * @param[in] m_size Size of the merged array
+*/
 void merge(const double a1[], const double a2[], size_t a1_size, size_t a2_size, double *merged, size_t m_size)
 {
   int cmp;
@@ -118,6 +130,12 @@ void merge(const double a1[], const double a2[], size_t a1_size, size_t a2_size,
   }
 }
 
+/**
+ * Compare two doubles
+ * @param[in] d1 The first double
+ * @param[in] d2 The second double
+ * @return An integer that tells which double is largest
+*/
 int cmp_dbl(const double d1, const double d2)
 {
   if (d1 < d2)
