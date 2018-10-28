@@ -1,3 +1,3 @@
 # Merge Arrays
 
-My 8th imperative programming assignment
+My 7th imperative programming assignment
