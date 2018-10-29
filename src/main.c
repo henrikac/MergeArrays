@@ -73,7 +73,7 @@ int main(void)
 /**
  * Prompts user for an array
  * @param[in] msg Message displayed to the user
- * @param[out] arr_size Size of the array
+ * @param[in, out] arr_size Size of the array
  * @return An array (pointer) with arr_size items in it
 */
 double *prompt_for_arr(const char* msg, size_t *arr_size)

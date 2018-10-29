@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['get_5fnum_5funiques',['get_num_uniques',['../main_8c.html#a903fbbbe1fe5a5f2fe9afbfeb43ca066',1,'main.c']]]
+  ['clear',['CLEAR',['../main_8c.html#a611cc9b5f655508482f3d7a9751c182a',1,'main.c']]],
+  ['cmp_5fdbl',['cmp_dbl',['../main_8c.html#a3397cfac7807ba6e71bbffbfd2b63a5d',1,'main.c']]]
 ];
