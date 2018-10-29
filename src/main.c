@@ -11,9 +11,14 @@
  * The result array should also contain no dublicate values.
 */
 
-#include <malloc.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+#ifdef _WIN32
+#define CLEAR "cls"
+#else
+#define CLEAR "clear"
+#endif
 
 typedef enum { false, true } bool;
 
@@ -29,6 +34,15 @@ int main(void)
   double *arr1;
   double *arr2;
   double *merged_arr;
+
+  system(CLEAR);
+
+  printf("==============\n");
+  printf(" Array Merger\n");
+  printf("==============\n");
+
+  printf("\nThis program will prompt you for two arrays of numbers sorted in ascending order");
+  printf("\nIt will then merge those two arrays into a single array with no dublicate values\n");
 
   arr1 = prompt_for_arr("\nEnter size of the first array: ", &arr1_size);
   arr2 = prompt_for_arr("\nEnter size of the second array: ", &arr2_size);
@@ -49,7 +63,7 @@ int main(void)
 
   printf("\nMerged: ");
   for (i = 0; i < merged_size; i++)
-    printf(" %f", merged_arr[i]);
+    printf(" %.2f", merged_arr[i]);
 
   free(merged_arr);
 
@@ -93,7 +107,7 @@ double *prompt_for_arr(const char* msg, size_t *arr_size)
 
   for (i = 0; i < *arr_size; i++)
   {
-    printf("\nEnter number %d of %d: ", i + 1, *arr_size);
+    printf("Enter number %d of %d: ", i + 1, *arr_size);
     scanf(" %lf", &a[i]);
 
     if (i > 0 && cmp_dbl(a[i], a[i - 1]) == -1)  /**< Making sure that the entered number is greater than the previous entered number */
