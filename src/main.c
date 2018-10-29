@@ -1,5 +1,5 @@
 /*
- * Programmer: Henrik A. Christensen     Date Completed: 28-10-2018
+ * Programmer: Henrik A. Christensen     Date Completed: 29-10-2018
  * Instructor: Kurt Nørmark              Class:          Imperative Programming
  *
  * Write a function that will merge the contents of two sorted arrays (ascending order)
@@ -11,22 +11,29 @@
  * The result array should also contain no dublicate values.
 */
 
+#include <malloc.h>
 #include <stdio.h>
 #include <stdlib.h>
 
+typedef enum { false, true } bool;
+
+double *prompt_for_arr(const char* msg, size_t *arr_size);
 size_t get_num_uniques(const double a1[], const double a2[], size_t a1_size, size_t a2_size);
 void merge(const double a1[], const double a2[], size_t a1_size, size_t a2_size, double *merged, size_t m_size);
 int cmp_dbl(const double d1, const double d2);
 
 int main(void)
 {
-  double arr1[7] = { 1.3, 2.1, 4.2, 7.0, 9.0, 53.23, 99.9 };
-  double arr2[5] = { 2.1, 5.3, 7.0, 12.0, 32.35 };
+  int i;
+  size_t arr1_size, arr2_size, merged_size;
+  double *arr1;
+  double *arr2;
   double *merged_arr;
 
-  size_t arr1_size = sizeof(arr1) / sizeof(double);
-  size_t arr2_size = sizeof(arr2) / sizeof(double);
-  size_t merged_size = get_num_uniques(arr1, arr2, arr1_size, arr2_size);
+  arr1 = prompt_for_arr("\nEnter size of the first array: ", &arr1_size);
+  arr2 = prompt_for_arr("\nEnter size of the second array: ", &arr2_size);
+
+  merged_size = get_num_uniques(arr1, arr2, arr1_size, arr2_size);
   
   merged_arr = (double*)malloc(merged_size * sizeof(double));
   if (merged_arr == NULL)
@@ -37,9 +44,66 @@ int main(void)
 
   merge(arr1, arr2, arr1_size, arr2_size, merged_arr, merged_size);
 
+  free(arr1);
+  free(arr2);
+
+  printf("\nMerged: ");
+  for (i = 0; i < merged_size; i++)
+    printf(" %f", merged_arr[i]);
+
   free(merged_arr);
 
   return EXIT_SUCCESS;
+}
+
+/**
+ * Prompts user for an array
+ * @param[in] msg Message displayed to the user
+ * @param[out] arr_size Size of the array
+ * @return An array (pointer) with arr_size items in it
+*/
+double *prompt_for_arr(const char* msg, size_t *arr_size)
+{
+  int i;
+  double *a;
+
+  while (true)
+  {
+    printf(msg);
+    if (scanf(" %u", arr_size) != 1)
+    {
+      printf("\nInvalid array size");
+      fflush(stdin);
+      continue;
+    }
+
+    if (*arr_size >= 1)
+    {
+      fflush(stdin);
+      break;
+    }
+  }
+
+  a = (double*)malloc(*arr_size * sizeof(double));
+  if (a == NULL)
+  {
+    printf("\nCouldn't allocate memory");
+    exit(EXIT_FAILURE);
+  }
+
+  for (i = 0; i < *arr_size; i++)
+  {
+    printf("\nEnter number %d of %d: ", i + 1, *arr_size);
+    scanf(" %lf", &a[i]);
+
+    if (i > 0 && cmp_dbl(a[i], a[i - 1]) == -1)  /**< Making sure that the entered number is greater than the previous entered number */
+    {
+      printf("\nThe number has to be greater than the previous number");
+      i--;
+    }
+  }
+
+  return a;
 }
 
 /**
